@@ -66,13 +66,46 @@ if ($skip_file) {
 
 
 ### main logic
+### load the requested assembler template
+if (defined $ENV{KB_DEPLOYMENT_CONFIG} && -e $ENV{KB_DEPLOYMENT_CONFIG}) {
+    $cfg = new Config::Simple($ENV{KB_DEPLOYMENT_CONFIG}) or
+	die "can not create Config object";
+    msg( "using $ENV{KB_DEPLOYMENT_CONFIG} for configs", $verbose);
+}
+else {
+    $cfg = new Config::Simple(syntax=>'ini');
+    $cfg->param('homology_service.assembly_tt','/homes/brettin/local/dev_container/modules/homology_service/templat
+es/bwa-idx.tt');
+    $cfg->param('homology_service.assembly_tt','/homes/brettin/local/dev_container/modules/homology_service/templat
+es/bwa-mem.tt');
+    msg("using hardcoded config values " . $cfg->param('homology_service.bwa-idx_tt'), $verbose);
+    msg("using hardcoded config values " . $cfg->param('homology_service.bwa-mem_tt'), $verbose)
+}
 
 if ($ih) { 
   while(<$ih>) {
-    my($metagenome_id, $filename) = split /\s+/;
+    my($metagenome_id, $contigs, $reads) = split /\s+/;
     if ( $skip{$metagenome_id} >= 1) { print "skipping $metagenome_id\n"; next; }
     die "$filename not readable" unless (-e $filename and -r $filename);
 
+    # infile is the contigs file
+    my $vars = { infile => $filename, idx => $infile, reads => $reads };
+    my $tt = Template->new( {'ABSOLUTE' => 1} );
+
+    $tt->process($cfg->param('homology_service.assembly_tt'), $vars, \$cmd)
+      or die $tt->error(), "\n";
+
+    msg( "cmd: $cmd", $verbose );
+
+    # !system $cmd or die "could not execute $cmd\n$!";
+
+    print $oh $metagenome_id, "\t", $vars->{out_dir} . "/final.contigs.fa\n";
+
+    msg( "cmd: finished", $verbose );
+
+
+    my $cmd1 = bwa index $contigs;
+    my $cmd2 = bwa mem $contig
 
     msg ("done processing $filename");
   }
