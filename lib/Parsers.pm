@@ -46,5 +46,24 @@ sub parse_glimmer_protein {
 
 } 
 
+sub parse_megahit_assembly {
+  my $defline = shift or die "no defline provided";
+  my($id, $cov, $len);
+
+  # look at the id
+  $id = $1 if />(\S+)/;
+  $id = $1 if />(\S+)_length/;
+  die "could not parse id" unless $id;
+  # look at coverage
+  $cov = $1 if /multi=([\d\.]+)/;
+  $cov = $1 if /multi_([\d\.]+)/;
+  die "could not parse coverage" unless $cov;
+  # look at length
+  $len = $1 if /len=(\d+)/;
+  $len = $1 if /length_(\d+)/;
+  die "could not parse length" unless $len;
+
+  return {'contig_id' => $id, 'coverage' => $cov, 'length' => $len};
+}
 
 1; 
