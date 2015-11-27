@@ -7,6 +7,9 @@ use Template;
 use Config::Simple;
 use Log::Message::Simple qw[:STD :CARP];
 
+my $template = '/lustre/beagle2/brettin/HOMOLOGY_SERVICE/homology_service/templates/megahit-se.tt';
+
+
 ### redirect log output
 my ($scriptname,$scriptpath,$scriptsuffix) = fileparse($0, ".pl");
 open LOG, ">>$scriptname.log" or die "cannot open log file";
@@ -69,7 +72,7 @@ if (defined $ENV{KB_DEPLOYMENT_CONFIG} && -e $ENV{KB_DEPLOYMENT_CONFIG}) {
 }
 else {
     $cfg = new Config::Simple(syntax=>'ini');
-    $cfg->param('homology_service.assembly_tt','/homes/brettin/local/dev_container/modules/homology_service/templates/megahit-se.tt');
+    $cfg->param('homology_service.assembly_tt',$template);
 }
 
 
