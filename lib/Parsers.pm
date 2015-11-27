@@ -1,4 +1,37 @@
 package Parsers;
+use strict;
+use Log::Message::Simple;
+my $verbose = 1;
+
+
+
+### Adapters
+sub parse_gene_calls {
+  my ($defline, $gene_caller) = @_;
+  
+  if ($gene_caller =~ /prodigal/i) {
+    return parse_glimmer_protein($defline);
+  }
+
+  else {
+    die "undefined gene caller: $gene_caller";
+  }
+}
+
+sub parse_assembly {
+  my ($defline, $assembler) = @_;
+
+  if ($assembler =~ /megahit/i) {
+    return parse_megahit_assembly($_);
+  }
+
+  else {
+    die "undefined assembler: $assembler";
+  }
+}
+
+
+### Actual Parsers
 
 # Protein Translations
 
