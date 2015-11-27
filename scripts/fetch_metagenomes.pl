@@ -77,9 +77,12 @@ for (my $x=0+$offset; $x< $num+$offset; $x++) {
   }
 
   $perl_scalar = $json->decode( $json_text );
-  download($perl_scalar->{'data'}->[0]->{'url'}, $perl_scalar->{'data'}->[0]->{'file_name'});  
-  die unless verify_download($perl_scalar->{'data'}->[0]->{'file_name'}, $perl_scalar->{'data'}->[0]->{'file_md5'});
-
+  for (my $tries=1; $tries <=3; $tries++)  {
+    download($perl_scalar->{'data'}->[0]->{'url'}, $perl_scalar->{'data'}->[0]->{'file_name'});  
+    last if verify_download($perl_scalar->{'data'}->[0]->{'file_name'}, $perl_scalar->{'data'}->[0]->{'file_md5'});
+    die ("filed to download three times ", $perl_scalar->{'data'}->[0]->{'file_name'}) if $tries == 3;
+    sleep $tries*3;
+  }
   print $oh $perl_scalar->{'data'}->[0]->{'id'}, "\t", $perl_scalar->{'data'}->[0]->{'file_name'}, "\n"; 
 
   msg( "done downloading " . $perl_scalar->{'data'}->[0]->{'file_name'}, $verbose);
@@ -106,8 +109,8 @@ sub verify_download {
   my $expected_md5 = shift or die "must prvide expected md5";
 
   my ($observed_md5, $filename)  =  split /\s+/, `md5sum $filename`; 
-  msg ( "expected: $expected_md5", $verbose);
-  msg ( "observed: $observed_md5", $verbose);
+  msg ( "expected $filename: $expected_md5", $verbose);
+  msg ( "observed $filename: $observed_md5", $verbose);
   return 1 if $observed_md5 eq $expected_md5;
   return 0 if $observed_md5 ne $expected_md5;
 }
