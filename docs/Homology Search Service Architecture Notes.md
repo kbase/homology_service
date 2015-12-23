@@ -173,13 +173,15 @@ We plan implementation of the Homology Service in the following stages:
 2.  Collection and creation of representative BLAST database from KBase
     Central Store. Jan 4-8 (Maulik)
 
-3.  Implementation of kmer-based core computation service. Jan 11-15
+3.  Creation of pre-computed Diamond databases. Jan 4-8 (Fangfang) 
+
+4.  Implementation of kmer-based core computation service. Jan 11-15
     (Bob)
 
-4.  Implementation of BLAST-based core computation service. Jan 18-22
+5.  Implementation of BLAST-based core computation service. Jan 18-22
     (Bob)
 
-5.  Implementation of user-level operations. Jan 18-29 (Bob, Maulik,
+6.  Implementation of user-level operations. Jan 18-29 (Bob, Maulik,
     Harry etc). This overlaps \#4 so that the user-level operations can
     help influence BLAST-based compute service as it is being built.
 
