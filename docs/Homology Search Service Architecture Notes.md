@@ -175,10 +175,10 @@ We plan implementation of the Homology Service in the following stages:
 
 3.  Creation of pre-computed Diamond databases. Jan 4-8 (Fangfang) 
 
-4.  Implementation of BLAST-based core computation service. Jan 18-22
+4.  Implementation of BLAST-based core computation service. Jan 11-15
     (Bob)
 
-5.  Implementation of kmer-based core computation service. Jan 11-15
+5.  Implementation of kmer-based core computation service. Jan 18-12
     (Bob)
 
 6.  Implementation of user-level operations. Jan 18-29 (Bob, Maulik,
