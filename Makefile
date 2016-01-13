@@ -9,9 +9,9 @@ SERVICE_MODULE = lib/Bio/KBase/HomologyService/Service.pm
 
 SERVICE = homology_service
 SERVICE_NAME = HomologyService
-SERVICE_PORT = 7133
+SERVICE_PORT = 7134
 
-ASYNC_SERVICE_PORT = 7134
+ASYNC_SERVICE_PORT = 7135
 ASYNC_SERVICE_PSGI = HomologyServiceAsync.psgi
 
 SERVICE_URL = https://kbase.us/services/$(SERVICE)
