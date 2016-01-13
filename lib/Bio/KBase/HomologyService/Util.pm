@@ -167,6 +167,11 @@ sub blast_fasta_to_genomes
     {
 	my $search = $report->{report}->{results}->{search};
 	$search->{query_id} =~ s/^gnl\|//;
+	if ($search->{query_id} =~ /^Query_\d+/)
+	{
+	    my($xid) = $search->{query_title} =~ /^(\S+)/;
+	    $search->{query_id} = $xid if $xid;
+	}
 	for my $res (@{$search->{hits}})
 	{
 	    for my $desc (@{$res->{description}})
