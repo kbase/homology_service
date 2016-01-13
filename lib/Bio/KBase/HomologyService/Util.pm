@@ -139,7 +139,6 @@ sub blast_fasta_to_genomes
 
     push(@cmd, "-db", "$db_file");
     push(@cmd, "-outfmt", $fmt);
-    push(@cmd, "-parse_deflines");
     
     my $json;
     my $err;
