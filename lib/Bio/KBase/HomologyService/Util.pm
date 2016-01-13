@@ -114,6 +114,9 @@ sub blast_fasta_to_genomes
     my $subj_db_type = $blast_command_subject_type{$program};
     my $exe = $blast_command_exe_name{$program};
 
+    my $suffix = $self->impl->{_blast_program_suffix};
+    $exe .= $suffix if $suffix;
+
     if (!$subj_db_type || !$exe)
     {
 	die "blast_fasta_to_genomes: Couldn't find blast program $program";
