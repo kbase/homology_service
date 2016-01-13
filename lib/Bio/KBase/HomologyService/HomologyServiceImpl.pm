@@ -34,6 +34,7 @@ sub new
 
     $self->{_blast_db_genomes} = $cfg->setting('blast-db-genomes');
     $self->{_blast_program_suffix} = $cfg->setting('blast-program-suffix');
+    $self->{_blast_program_prefix} = $cfg->setting('blast-program-prefix');
 
     my $util = Bio::KBase::HomologyService::Util->new($self);
     $self->{_util} = $util;

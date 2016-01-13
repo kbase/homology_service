@@ -116,6 +116,8 @@ sub blast_fasta_to_genomes
 
     my $suffix = $self->impl->{_blast_program_suffix};
     $exe .= $suffix if $suffix;
+    my $prefix = $self->impl->{_blast_program_prefix};
+    $exe = $prefix . $exe if $prefix;
 
     if (!$subj_db_type || !$exe)
     {
