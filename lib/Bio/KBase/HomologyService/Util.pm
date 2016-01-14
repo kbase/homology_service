@@ -133,7 +133,8 @@ sub blast_fasta_to_genomes
     }
     if ($max_hits)
     {
-	push(@cmd, "-max_hsps", $max_hits);
+	push(@cmd, "-max_target_seqs", $max_hits);
+#	push(@cmd, "-max_hsps", $max_hits);
     }
     if ($min_coverage)
     {
