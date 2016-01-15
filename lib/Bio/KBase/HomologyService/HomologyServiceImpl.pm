@@ -153,6 +153,8 @@ FeatureMetadata is a reference to a hash where the following keys are defined:
 	function has a value which is a string
 	genome_name has a value which is a string
 	genome_id has a value which is a string
+	md5 has a value which is a string
+	match_count has a value which is an int
 
 </pre>
 
@@ -249,6 +251,8 @@ FeatureMetadata is a reference to a hash where the following keys are defined:
 	function has a value which is a string
 	genome_name has a value which is a string
 	genome_id has a value which is a string
+	md5 has a value which is a string
+	match_count has a value which is an int
 
 
 =end text
@@ -472,6 +476,8 @@ FeatureMetadata is a reference to a hash where the following keys are defined:
 	function has a value which is a string
 	genome_name has a value which is a string
 	genome_id has a value which is a string
+	md5 has a value which is a string
+	match_count has a value which is an int
 
 </pre>
 
@@ -569,6 +575,8 @@ FeatureMetadata is a reference to a hash where the following keys are defined:
 	function has a value which is a string
 	genome_name has a value which is a string
 	genome_id has a value which is a string
+	md5 has a value which is a string
+	match_count has a value which is an int
 
 
 =end text
@@ -1019,6 +1027,8 @@ a reference to a hash where the following keys are defined:
 function has a value which is a string
 genome_name has a value which is a string
 genome_id has a value which is a string
+md5 has a value which is a string
+match_count has a value which is an int
 
 </pre>
 
@@ -1030,6 +1040,8 @@ a reference to a hash where the following keys are defined:
 function has a value which is a string
 genome_name has a value which is a string
 genome_id has a value which is a string
+md5 has a value which is a string
+match_count has a value which is an int
 
 
 =end text

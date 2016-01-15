@@ -11,7 +11,7 @@ SERVICE = homology_service
 SERVICE_NAME = HomologyService
 SERVICE_PORT = 7134
 
-ASYNC_SERVICE_PORT = 7135
+#ASYNC_SERVICE_PORT = 7135
 ASYNC_SERVICE_PSGI = HomologyServiceAsync.psgi
 
 SERVICE_URL = https://kbase.us/services/$(SERVICE)
@@ -35,6 +35,7 @@ TPAGE_ARGS = --define kb_top=$(TARGET) \
 	--define kb_service=$(SERVICE) \
 	--define kb_service_name=$(SERVICE_NAME) \
 	--define kb_service_port=$(SERVICE_PORT) \
+	--define kb_psgi=$(SERVICE_PSGI_FILE) \
 	--define kb_async_service_port=$(ASYNC_SERVICE_PORT) \
 	--define kb_async_psgi=$(ASYNC_SERVICE_PSGI) \
 	$(TPAGE_TEMPDIR)

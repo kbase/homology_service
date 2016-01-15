@@ -101,6 +101,8 @@ module HomologyService
 	string function;
 	string genome_name;
 	string genome_id;
+	string md5;
+	int match_count;
     } FeatureMetadata;
 
     typedef structure

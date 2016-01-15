@@ -111,7 +111,7 @@ sub build_alias_database
 
 sub construct_blast_command
 {
-    my($self, $program, $evalue_cutoff, $max_hits, $min_coverage) = @_
+    my($self, $program, $evalue_cutoff, $max_hits, $min_coverage) = @_;
 
     my $exe = $blast_command_exe_name{$program};
 
@@ -141,6 +141,8 @@ sub construct_blast_command
     {
 	push(@cmd, "-qcov_hsp_perc", $min_coverage);
     }
+
+    push(@cmd, "-num_threads", 6);
 
     return @cmd;
 }
@@ -279,7 +281,7 @@ sub blast_fasta_to_database
     my $db_file = $self->impl->{_blast_db_databases} . "/" . $database_key;
     -f $db_file or die "Couldn't find db file $db_file\n";
 
-    my $map_file = $self->impl->{_blast_db_databases} . "/" . $database_key . ".map.db";
+    my $map_file = $self->impl->{_blast_db_databases} . "/" . $database_key . ".map.btree";
     my %map;
 
     if (!tie %map, 'DB_File', $map_file, O_RDONLY, 0, $DB_BTREE)
@@ -294,9 +296,9 @@ sub blast_fasta_to_database
     
     my $json;
     my $err;
-#    my $ok = run(\@cmd, "<", \$fasta_data, ">", \$json, "2>", \$err);
+    my $ok = run(\@cmd, "<", \$fasta_data, ">", \$json, "2>", \$err);
 
-    my $ok = run(["cat /Users/olson/nr.out"], ">", \$json);
+#     my $ok = run(["cat", "$ENV{HOME}/nr.out"], ">", \$json);
 
     if (!$ok)
     {
@@ -312,6 +314,7 @@ sub blast_fasta_to_database
     $doc or die "JSON output didn't have expected key BlastOutput2";
 
     my $metadata = {};
+    my $identical_proteins = {};
     for my $report (@$doc)
     {
 	my $search = $report->{report}->{results}->{search};
@@ -347,6 +350,8 @@ sub blast_fasta_to_database
 		    $md->{function} = $rep_fn;
 		    $md->{genome_name} = $rep_genome;
 		    $md->{genome_id} = $rep_genome_id;
+		    $md->{md5} = $md5;
+		    $md->{match_count} = 0 + $matches;
 
 		    $metadata->{$desc->{id}} = $md if $md;
 
@@ -355,6 +360,7 @@ sub blast_fasta_to_database
 		    for my $one (@iden)
 		    {
 			my($xid, $xfunc, $xgenome) = split(/\t/, $one);
+			next if $xid eq $desc->{id};
 			my($xgn) = $xid =~ /^(kb\|g\.\d+)/;
 			push(@{$identical_proteins->{$desc->{id}}}, [$xid, {
 			    function => $xfunc,
