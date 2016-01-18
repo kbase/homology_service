@@ -101,16 +101,48 @@ module HomologyService
 	string function;
 	string genome_name;
 	string genome_id;
+	string md5;
+	int match_count;
     } FeatureMetadata;
+
+    typedef structure
+    {
+	float evalue_cutoff;
+	int max_hits;
+	float min_coverage;
+    } BlastParameters;
 
     funcdef blast_fasta_to_genomes(string fasta_data,
 				   string program,
 				   list<genome_id> genomes,
 				   /* subject_type is "contigs" or "features" */
-				   string subject_type, 
+				   string subject_type,
+				   /* Post demo we will slot this in here.
+				      BlastParameters blast_parameters */
 				   float evalue_cutoff,
 				   int max_hits,
-				   float min_coverage
-				   )
+				   float min_coverage)
 	returns(list<Report> reports, mapping<string, FeatureMetadata> metadata);
+
+    typedef structure
+    {
+	string name;
+	string key;
+	/* db_type is either "dna" or "protein" */
+	string db_type;
+	int seq_count;
+    } DatabaseDescription;
+
+    funcdef enumerate_databases() returns (list<DatabaseDescription>);
+
+    funcdef blast_fasta_to_database(string fasta_data, string program, string database_key,
+				   /* Post demo we will slot this in here.
+				      BlastParameters blast_parameters */
+				    float evalue_cutoff,
+				    int max_hits,
+				    float min_coverage)
+	returns (list<Report> reports,
+		 mapping <string, FeatureMetadata> metadata,
+		 mapping <string, list<tuple<string, FeatureMetadata>>> identical_proteins);
+				    
 };
