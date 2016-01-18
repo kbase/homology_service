@@ -18,6 +18,9 @@ Given a NR mapping file build a btree database for optimized lookups.
 =cut
 
 my($opt, $usage) = describe_options("%c %o map-file.tab map-file.btree",
+				    ["sort-program=s", "Use this sort program"],
+				    ["parallel=s", "Use this parallelism in the sort"],
+				    ["memory=s", "Use this much memory for the sort", { default => '10G' } ],
 				    ["help|h", "Show this help message."],
 				    );
 print($usage->text), exit 0 if $opt->help;
@@ -32,7 +35,12 @@ $btree or die "Cannot create btree $btree: $!";
 
 -f $tab_file or die "$tab_file does not exist\n";
 #open(S, "(head -n 100 $tab_file; head -n 100 $tab_file) | sort -k1,1|") or die "Cannot open sort: $!";
-open(S, "-|", "sort", "-S", "20G", "-k1,1", $tab_file) or die "Cannot open sort: $!";
+
+my $sort = $opt->sort_program || "sort";
+my @par;
+@par = ("--parallel", $opt->parallel) if $opt->parallel;
+
+open(S, "-|", $sort, @par, "-S", $opt->memory, "-k1,1", $tab_file) or die "Cannot open sort: $!";
 my $last;
 my @data;
 while (<S>)

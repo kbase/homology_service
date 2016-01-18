@@ -255,7 +255,7 @@ sub enumerate_databases
     for my $db (<$dir/*.{faa,ffn}>)
     {
 	my $key = basename($db);
-	my($name, $path, $suffix) = basename($db, '.faa', '.ffn');
+	my($name, $path, $suffix) = fileparse($db, '.faa', '.ffn');
 
 	my $descr = {
 	    name => $name,

@@ -34,6 +34,17 @@ sub new
 
     $self->{_blast_db_genomes} = $cfg->setting('blast-db-genomes');
     $self->{_blast_db_databases} = $cfg->setting('blast-db-databases');
+
+    #
+    # Determine if there is a custom blast installed in the service
+    # directory. If so default the prefix to that.
+    #
+    my $svcdir = $ENV{KB_SERVICE_DIR};
+    if (-x "$svcdir/bin/blastp")
+    {
+	$self->{_blast_program_prefix} = "$svcdir/bin/";
+    }
+    
     $self->{_blast_program_suffix} = $cfg->setting('blast-program-suffix');
     $self->{_blast_program_prefix} = $cfg->setting('blast-program-prefix');
 
