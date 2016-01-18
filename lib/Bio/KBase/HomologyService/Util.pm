@@ -142,7 +142,10 @@ sub construct_blast_command
 	push(@cmd, "-qcov_hsp_perc", $min_coverage);
     }
 
-    push(@cmd, "-num_threads", 6);
+    if ($self->impl->{_blast_threads})
+    {
+	push(@cmd, "-num_threads", $self->impl->{_blast_threads});
+    }
 
     return @cmd;
 }

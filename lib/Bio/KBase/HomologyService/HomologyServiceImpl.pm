@@ -35,6 +35,16 @@ sub new
     $self->{_blast_db_genomes} = $cfg->setting('blast-db-genomes');
     $self->{_blast_db_databases} = $cfg->setting('blast-db-databases');
 
+    my $thr = $cfg->setting('blast-threads');
+    if ($thr =~ /^\s*(\d+)\s*$/)
+    {
+	$self->{_blast_threads} = $1;
+    }
+    elsif ($thr)
+    {
+	warn "Invalid format for blast-threads: '$thr'. Ignoring this value.\n";
+    }
+
     #
     # Determine if there is a custom blast installed in the service
     # directory. If so default the prefix to that.
