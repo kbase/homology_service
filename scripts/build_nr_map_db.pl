@@ -1,6 +1,7 @@
 use strict;
 use DB_File;
 use Getopt::Long::Descriptive;
+use Data::Dumper;
 
 =head1 NAME
 
@@ -30,12 +31,28 @@ my $btree = tie %idx, 'DB_File', $btree_file, O_RDWR | O_CREAT, 0644, $DB_BTREE;
 $btree or die "Cannot create btree $btree: $!";
 
 -f $tab_file or die "$tab_file does not exist\n";
+#open(S, "(head -n 100 $tab_file; head -n 100 $tab_file) | sort -k1,1|") or die "Cannot open sort: $!";
 open(S, "-|", "sort", "-S", "20G", "-k1,1", $tab_file) or die "Cannot open sort: $!";
+my $last;
+my @data;
 while (<S>)
 {
-    if (my($md5, $fid, $func, $genome) = /^([0-9a-f]{32})\tkb\|(\S+)\s{3}(.*)\s{3}\[([^]+)\]/)
+    if (my($md5, $fid, $func, $genome) = /^([0-9a-f]{32})\t(kb\|\S+)\s{3}(.*)\s{3}\[([^]]+)\]/)
     {
-	print Dumper($md5, $fid, $func, $genome);
+	if ($md5 ne $last)
+	{
+	    if ($last)
+	    {
+		$idx{$last} = join($;, @data);
+		@data = ();
+	    }
+	    $last = $md5;
+	}
+
+	push(@data, join("\t", $fid, $func, $genome));
     }
 }
     
+$idx{$last} = join($;, @data);
+
+untie %idx;
