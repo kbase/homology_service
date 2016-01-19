@@ -368,7 +368,7 @@ sub blast_fasta_to_database
 			push(@{$identical_proteins->{$desc->{id}}}, [$xid, {
 			    function => $xfunc,
 			    genome_name => $xgenome,
-			    genome_name => $xgn,
+			    genome_id => $xgn,
 			}]);
 		    }
 		}
