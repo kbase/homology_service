@@ -339,7 +339,7 @@ sub blast_fasta_to_database
 
 		# "title": "md5|b4dd51958f3c7a7a21e0f222dcbbd764|kb|g.1053.peg.3023   Threonine synthase (EC 4.2.3.1)   [Escherichia coli 101-1]   (1067 matches)"
 
-		if ($desc->{title} =~ /^md5\|([a-z0-9]{32})\|((kb\|g\.\d+)\S+)\s{3}(.+)\s{3}\[(.*?)\]\s{3}\((\d+)\s+matches/)
+		if ($desc->{title} =~ /^md5\|([a-z0-9]{32})\|((kb\|g\.\d+)\S+)\s{3}(.*)\s{3}\[(.*?)\]\s{3}\((\d+)\s+matches/)
 		{
 		    my $md5 = $1;
 		    my $rep = $2;
