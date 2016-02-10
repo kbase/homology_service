@@ -372,6 +372,24 @@ sub blast_fasta_to_database
 			}]);
 		    }
 		}
+		#
+		# Contigs database
+		#
+		# >kb|g.0.c.1   [Escherichia coli K12]
+		#
+		elsif ($desc->{title} =~ /^(kb\|(g\.\d+)\S+)\s+\[(.*)\]/)
+		{
+		    my $contig = $1;
+		    my $gid = $2;
+		    my $gname = $3;
+
+		    $desc->{id} = $contig;
+
+		    $md->{genome_name} = $gname;
+		    $md->{genome_id} = $gid;
+
+		    $metadata->{$desc->{id}} = $md if $md;
+		}
 	    }
 	}
     }
