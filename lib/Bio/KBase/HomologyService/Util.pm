@@ -1,5 +1,7 @@
 package Bio::KBase::HomologyService::Util;
 
+use Bio::KBase::HomologyService::Bench;
+
 use strict;
 use File::Temp;
 use File::Basename;
@@ -173,7 +175,30 @@ sub blast_fasta_to_genomes
     
     my $json;
     my $err;
+
+    my $bench = Bio::KBase::HomologyService::Bench->new();
     my $ok = run(\@cmd, "<", \$fasta_data, ">", \$json, "2>", \$err);
+    $bench->finish();
+
+    {
+	my $ctx = $Bio::KBase::HomologyService::Service::CallContext;
+    
+	my $len = length($fasta_data);
+	my $stat = $bench->stats_text;
+	my $g = join(",", @$genomes);
+	my $rsize = length($json);
+	my $logstr = "blast_fasta_to_genomes len=$len $stat program=$program genomes=$g ok=$ok" .
+		       ($ok ? " result_size=$rsize" : " err=$err");
+	if ($ctx)
+	{
+	    $ctx->log_info($logstr);
+	}
+	else
+	{
+	    print STDERR $logstr, "\n";
+	}
+	    
+    }
 
     if (!$ok)
     {
@@ -278,7 +303,7 @@ sub blast_fasta_to_database
     my @cmd = $self->construct_blast_command($program, $evalue_cutoff, $max_hits, $min_coverage);
     if (!@cmd)
     {
-	die "blast_fasta_to_genomes: Couldn't find blast program $program";
+	die "blast_fasta_to_database: Couldn't find blast program $program";
     }
 
     my $db_file = $self->impl->{_blast_db_databases} . "/" . $database_key;
@@ -289,7 +314,7 @@ sub blast_fasta_to_database
 
     if (!tie %map, 'DB_File', $map_file, O_RDONLY, 0, $DB_BTREE)
     {
-	warn "Could not map $map_file: $!";
+	# warn "Could not map $map_file: $!";
     }
 
     my $fmt = 15;		# JSON single file
@@ -299,9 +324,30 @@ sub blast_fasta_to_database
     
     my $json;
     my $err;
+    my $bench = Bio::KBase::HomologyService::Bench->new();
     my $ok = run(\@cmd, "<", \$fasta_data, ">", \$json, "2>", \$err);
 
-#     my $ok = run(["cat", "$ENV{HOME}/nr.out"], ">", \$json);
+    $bench->finish();
+
+    {
+	my $ctx = $Bio::KBase::HomologyService::Service::CallContext;
+    
+	my $len = length($fasta_data);
+	my $stat = $bench->stats_text;
+	my $rsize = length($json);
+	my $logstr = "blast_fasta_to_database len=$len db_file=$db_file $stat program=$program ok=$ok" .
+		       ($ok ? " result_size=$rsize" : " err=$err");
+	if ($ctx)
+	{
+	    $ctx->log_info($logstr);
+	}
+	else
+	{
+	    print STDERR $logstr, "\n";
+	}
+	    
+    }
+
 
     if (!$ok)
     {
