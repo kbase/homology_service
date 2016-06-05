@@ -10,7 +10,8 @@ SERVER_SPEC = HomologyService.spec
 # the NCBI BLAST distribution.
 #
 BLAST_BASE = ncbi-blast-2.3.0+
-BLAST_FTP_SRC = ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/$(BLAST_BASE)-x64-linux.tar.gz
+BLAST_VERSION = 2.3.0
+BLAST_FTP_SRC = ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/$(BLAST_VERSION)/$(BLAST_BASE)-x64-linux.tar.gz
 BLAST_FTP_FILE = $(notdir $(BLAST_FTP_SRC))
 BLAST_DEPLOY_DIR = $(TARGET)/services/$(SERVICE)/bin
 
